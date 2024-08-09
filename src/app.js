@@ -132,8 +132,8 @@ document.getElementById("draw-button").addEventListener("click", event => {
   enableSortButton();
   const cardsNumber = parseInt(cardsNumberInput.value);
   const deckIndexes = generateDeckIndexes(cardsNumber);
-  const deck = document.getElementById("deck");
-  deck.innerHTML = generateDeckHTML(deckIndexes);
+  document.getElementById("deck").innerHTML = generateDeckHTML(deckIndexes);
+  document.getElementById("sorting-log").innerHTML = "";
   renderedDeckIndexes = [...deckIndexes];
 });
 
@@ -143,6 +143,7 @@ document.getElementById("sort-button").addEventListener("click", event => {
   let sortingLogHTML = `<h2 class="text-center mt-4 mb-4">Bubble Sort Log</h2>`;
   let swapsNumber = 0;
   for (let r = renderedDeckIndexes.length - 1; r >= 0; r--) {
+    let atLeastOneSwap = false;
     for (let l = 0; l < r; l++) {
       if (
         renderedDeckIndexes[l].suitIndex >
@@ -155,24 +156,22 @@ document.getElementById("sort-button").addEventListener("click", event => {
         const aux = renderedDeckIndexes[l];
         renderedDeckIndexes[l] = renderedDeckIndexes[l + 1];
         renderedDeckIndexes[l + 1] = aux;
-
         swapsNumber++;
-
+        atLeastOneSwap = true;
         sortingLogHTML += `<h4 class="text-center">${swapsNumber}. Swap cards in positions ${l +
-          1} and ${l + 2}</h2>`;
-        sortingLogHTML += generateDeckHTML(renderedDeckIndexes);
+          1} and ${l + 2}.</h2>${generateDeckHTML(renderedDeckIndexes)}`;
       }
+    }
+    if (!atLeastOneSwap) {
+      break;
     }
   }
 
   if (swapsNumber === 0) {
     sortingLogHTML =
-      '<h2 class="text-center mt-4 mb-4">Deck already sorted :)</h2>';
+      '<h2 class="text-center mt-4 mb-4">Deck already sorted.</h2>';
   }
-
-  const sortingLog = document.getElementById("sorting-log");
-  sortingLog.innerHTML = sortingLogHTML;
-
+  document.getElementById("sorting-log").innerHTML = sortingLogHTML;
   disableSortButton();
 });
 
