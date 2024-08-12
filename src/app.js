@@ -140,30 +140,29 @@ document.getElementById("draw-button").addEventListener("click", event => {
 // One of the most common conventions from lowest to highest is the English alphabetical order starting from
 // clubs, followed by diamonds, hearts, and spades. See https://en.wikipedia.org/wiki/High_card_by_suit
 document.getElementById("sort-button").addEventListener("click", event => {
-  let sortingLogHTML = `<h2 class="text-center mt-4 mb-4">Bubble Sort Log</h2>`;
+  let sortingLogHTML = `<h2 class="text-center mt-4 mb-4">Selection Sort Log</h2>`;
   let swapsNumber = 0;
-  for (let r = renderedDeckIndexes.length - 1; r >= 0; r--) {
-    let atLeastOneSwap = false;
-    for (let l = 0; l < r; l++) {
+  for (let l = 0; l < renderedDeckIndexes.length - 1; l++) {
+    let minIndex = l;
+    for (let r = l + 1; r < renderedDeckIndexes.length; r++) {
       if (
-        renderedDeckIndexes[l].suitIndex >
-          renderedDeckIndexes[l + 1].suitIndex ||
-        (renderedDeckIndexes[l].suitIndex ===
-          renderedDeckIndexes[l + 1].suitIndex &&
-          renderedDeckIndexes[l].rankIndex >
-            renderedDeckIndexes[l + 1].rankIndex)
+        renderedDeckIndexes[minIndex].suitIndex >
+          renderedDeckIndexes[r].suitIndex ||
+        (renderedDeckIndexes[minIndex].suitIndex ===
+          renderedDeckIndexes[r].suitIndex &&
+          renderedDeckIndexes[minIndex].rankIndex >
+            renderedDeckIndexes[r].rankIndex)
       ) {
-        const aux = renderedDeckIndexes[l];
-        renderedDeckIndexes[l] = renderedDeckIndexes[l + 1];
-        renderedDeckIndexes[l + 1] = aux;
-        swapsNumber++;
-        atLeastOneSwap = true;
-        sortingLogHTML += `<h4 class="text-center">${swapsNumber}. Swap cards in positions ${l +
-          1} and ${l + 2}.</h2>${generateDeckHTML(renderedDeckIndexes)}`;
+        minIndex = r;
       }
     }
-    if (!atLeastOneSwap) {
-      break;
+    if (minIndex > l) {
+      const aux = renderedDeckIndexes[l];
+      renderedDeckIndexes[l] = renderedDeckIndexes[minIndex];
+      renderedDeckIndexes[minIndex] = aux;
+      swapsNumber++;
+      sortingLogHTML += `<h4 class="text-center">${swapsNumber}. Swap cards in positions ${l +
+        1} and ${minIndex + 1}.</h2>${generateDeckHTML(renderedDeckIndexes)}`;
     }
   }
 
